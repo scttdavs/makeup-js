@@ -16,6 +16,7 @@ const defaultOptions = {
     collapseOnMouseOut: false,
     collapseOnClickOut: false,
     contentSelector: '.expander__content',
+    contentEl: null,
     expandedClass: null,
     expandOnClick: false,
     expandOnFocus: false,
@@ -113,7 +114,7 @@ module.exports = class {
 
         this.el = el;
         this.hostEl = el.querySelector(this.options.hostSelector); // the keyboard focusable host el
-        this.contentEl = el.querySelector(this.options.contentSelector);
+        this.contentEl = this.options.contentEl || el.querySelector(this.options.contentSelector);
 
         ExitEmitter.addFocusExit(this.el);
 

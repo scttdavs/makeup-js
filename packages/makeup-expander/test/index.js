@@ -511,3 +511,139 @@ describe('given a widget with expandedClass=foo', function() {
         });
     });
 });
+
+describe('given a widget with expandOnClick=true and contentEl passed in', function() {
+    beforeAll(function() {
+        document.body.innerHTML = '';
+        document.body.appendChild(containerEl);
+        widget = new Expander(widgetEl, {
+            expandOnClick: true,
+            contentEl: document.querySelector('.expander__content')
+        });
+        widget.expanded = false;
+        onExpand.calls.reset();
+        onCollapse.calls.reset();
+    });
+
+    afterAll(function() {
+        widget.destroy();
+        hostEl.blur();
+        onExpand.calls.reset();
+        onCollapse.calls.reset();
+    });
+
+    it('it should not have an expanded class', function() {
+        expect(widgetEl.classList.length).toEqual(1);
+    });
+
+    describe('when widget is collapsed', function() {
+        describe('and the host is clicked', function() {
+            beforeAll(function() {
+                hostEl.click();
+            });
+
+            afterAll(function() {
+                widget.expanded = false;
+                hostEl.blur();
+                onExpand.calls.reset();
+                onCollapse.calls.reset();
+            });
+
+            it('it should trigger 1 expand events', function() {
+                expect(onExpand).toHaveBeenCalledTimes(1);
+            });
+
+            it('it should trigger 0 collapse events', function() {
+                expect(onCollapse).toHaveBeenCalledTimes(0);
+            });
+
+            it('the host el should have aria-expanded=true', function() {
+                expect(hostEl.getAttribute('aria-expanded')).toEqual('true');
+            });
+        });
+
+        describe('and the host is focussed', function() {
+            beforeAll(function() {
+                widget.expanded = false;
+                onExpand.calls.reset();
+                onCollapse.calls.reset();
+                hostEl.focus();
+            });
+
+            afterAll(function() {
+                widget.expanded = false;
+                hostEl.blur();
+                onExpand.calls.reset();
+                onCollapse.calls.reset();
+            });
+
+            it('it should trigger 0 expand events', function() {
+                expect(onExpand).toHaveBeenCalledTimes(0);
+            });
+
+            it('it should trigger 0 collapse events', function() {
+                expect(onCollapse).toHaveBeenCalledTimes(0);
+            });
+
+            it('the host el should have aria-expanded=false', function() {
+                expect(hostEl.getAttribute('aria-expanded')).toEqual('false');
+            });
+        });
+
+        describe('and the host is hovered', function() {
+            beforeAll(function() {
+                widget.expanded = false;
+                onExpand.calls.reset();
+                onCollapse.calls.reset();
+                hostEl.dispatchEvent(new Event('mouseenter'));
+            });
+
+            afterAll(function() {
+                widget.expanded = false;
+                hostEl.blur();
+                onExpand.calls.reset();
+                onCollapse.calls.reset();
+            });
+
+            it('it should trigger 0 expand events', function() {
+                expect(onExpand).toHaveBeenCalledTimes(0);
+            });
+
+            it('it should trigger 0 collapse events', function() {
+                expect(onCollapse).toHaveBeenCalledTimes(0);
+            });
+
+            it('the host el should have aria-expanded=false', function() {
+                expect(hostEl.getAttribute('aria-expanded')).toEqual('false');
+            });
+        });
+
+        describe('and the document is clicked', function() {
+            beforeAll(function() {
+                widget.expanded = false;
+                onExpand.calls.reset();
+                onCollapse.calls.reset();
+                document.body.click();
+            });
+
+            afterAll(function() {
+                widget.expanded = false;
+                hostEl.blur();
+                onExpand.calls.reset();
+                onCollapse.calls.reset();
+            });
+
+            it('it should trigger 0 expand events', function() {
+                expect(onExpand).toHaveBeenCalledTimes(0);
+            });
+
+            it('it should observe 0 collapse events', function() {
+                expect(onCollapse).toHaveBeenCalledTimes(0);
+            });
+
+            it('the host el should have aria-expanded=false', function() {
+                expect(hostEl.getAttribute('aria-expanded')).toEqual('false');
+            });
+        });
+    });
+});
