@@ -512,12 +512,13 @@ describe('given a widget with expandedClass=foo', function() {
     });
 });
 
-describe('given a widget with expandOnClick=true and contentEl passed in', function() {
+describe('given a widget with expandOnClick=true and contentEl + hostEl passed in', function() {
     beforeAll(function() {
         document.body.innerHTML = '';
         document.body.appendChild(containerEl);
         widget = new Expander(widgetEl, {
             expandOnClick: true,
+            hostEl: document.querySelector('.expander__host'),
             contentEl: document.querySelector('.expander__content')
         });
         widget.expanded = false;

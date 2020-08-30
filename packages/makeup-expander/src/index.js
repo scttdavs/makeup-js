@@ -113,7 +113,7 @@ module.exports = class {
         this.options = Object.assign({}, defaultOptions, selectedOptions);
 
         this.el = el;
-        this.hostEl = el.querySelector(this.options.hostSelector); // the keyboard focusable host el
+        this.hostEl = this.options.hostEl || el.querySelector(this.options.hostSelector); // the keyboard focusable host el
         this.contentEl = this.options.contentEl || el.querySelector(this.options.contentSelector);
 
         ExitEmitter.addFocusExit(this.el);
